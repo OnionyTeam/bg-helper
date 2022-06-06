@@ -9,8 +9,8 @@
 ### to string (bg_helper::to_string)
 
 It provides conversion between **many type**s and strings, including
-`(unsinged) int`, `(unsigned) long`, `container: std::vector, std::array, std::list ...`
-`double`, `float`
+`(unsinged) int`, `(unsigned) long`, `container`,
+`double`, `float`, `bool`
 
 #### Example
 
@@ -26,6 +26,8 @@ int main()
     std::cout << bg_helper::to_string(f) << std::endl; //output: 3.14
     int i = 114514;
     std::cout << bg_helper::to_string(i) << std::endl; //output: 114514
+    bool b = true;
+    std::cout << bg_helper::to_string(b) << std::endl; //output: True
 }
 ```
 
