@@ -6,7 +6,7 @@
 
 
 CC = g++
-OUT_FILE_NAME = libgb_helper.a
+OUT_FILE_NAME = libbg_helper.a
 
 CFLAGS= -fPIC -O2 -g -Wall -c -fpermissive -std=c++20
 
@@ -25,7 +25,7 @@ OUT_DIR=./lib
 
 
 # Enumerating of every *.cpp as *.o and using that as dependency
-$(OUT_FILE_NAME): $(patsubst %.hpp,$(OBJ_DIR)/%.o,$(wildcard *.hpp))
+$(OUT_FILE_NAME): $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(wildcard *.cpp))
 	ar -r -o $(OUT_DIR)/$@ $^
 
 
