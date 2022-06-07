@@ -1,5 +1,5 @@
-#ifndef BGHELPER_OUTPUT_H__
-#define BGHELPER_OUTPUT_H__
+#ifndef _BGHELPER_OUTPUT_H__
+#define _BGHELPER_OUTPUT_H__
 
 #include <stdio.h>
 #include "string_concat.hpp"
@@ -31,4 +31,4 @@ namespace bg_helper {
 
 } // bg_helper
 
-#endif // BGHELPER_OUTPUT_H__
+#endif // _BGHELPER_OUTPUT_H__

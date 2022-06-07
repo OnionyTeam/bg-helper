@@ -1,5 +1,5 @@
-#ifndef _BGHELPER_CORE_H
-#define _BGHELPER_CORE_H
+#ifndef _BGHELPER_CORE_H__
+#define _BGHELPER_CORE_H__
 
 #include <type_traits>
 #include <concepts>
@@ -35,4 +35,4 @@ namespace bg_helper {
         std::convertible_to<T, std::wstring_view>;
 } // bg_helper
 
-#endif //_BGHELPER_CORE_H
+#endif //_BGHELPER_CORE_H__

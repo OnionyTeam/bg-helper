@@ -1,5 +1,5 @@
-#ifndef _BGHELPER_STRING_CONCAT_H
-#define _BGHELPER_STRING_CONCAT_H
+#ifndef _BGHELPER_STRING_CONCAT_H__
+#define _BGHELPER_STRING_CONCAT_H__
 
 #include "core.hpp"
 #include <string>
@@ -38,4 +38,4 @@ namespace bg_helper {
     
 } // bg_helper
 
-#endif //_BGHELPER_STRING_CONCAT_H
+#endif //_BGHELPER_STRING_CONCAT_H__

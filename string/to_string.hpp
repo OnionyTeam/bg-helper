@@ -1,5 +1,5 @@
-#ifndef _BGHELPER_TO_STRING_H
-#define _BGHELPER_TO_STRING_H
+#ifndef _BGHELPER_TO_STRING_H__
+#define _BGHELPER_TO_STRING_H__
 
 #include "core.hpp"
 #include <ranges>
@@ -85,4 +85,4 @@ namespace bg_helper {
 
 } // bg_helper
 
-#endif //_BGHELPER_TO_STRING_H
+#endif //_BGHELPER_TO_STRING_H__
