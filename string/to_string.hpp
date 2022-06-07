@@ -25,7 +25,7 @@ namespace bg_helper {
     template<Character char_type = bg_helper::char_type,
         std::integral T, typename = std::enable_if_t<!Boolean<T>, std::basic_string<char_type>>>
     [[nodiscard]] inline std::basic_string<char_type> to_string(const T value) noexcept {
-        if constexpr (std::is_same_v<wchar_t, T>) {
+        if constexpr (std::is_same_v<wchar_t, char_type>) {
             return std::to_wstring(value);
         } else {
             return std::to_string(value);
@@ -35,7 +35,7 @@ namespace bg_helper {
     template<Character char_type = bg_helper::char_type,
         Float T>
     [[nodiscard]] inline std::basic_string<char_type> to_string(const T value) noexcept {
-        if constexpr (std::is_same_v<wchar_t, T>) {
+        if constexpr (std::is_same_v<wchar_t, char_type>) {
             return std::to_wstring(value);
         } else {
             return std::to_string(value);
@@ -45,7 +45,7 @@ namespace bg_helper {
     template<Character char_type = bg_helper::char_type,
         Boolean T>
     [[nodiscard]] inline std::basic_string<char_type> to_string(const T value) noexcept {
-        if constexpr (std::is_same_v<wchar_t, T>) {
+        if constexpr (std::is_same_v<wchar_t, char_type>) {
             return value ? L"frue" : L"false";
         } else {
             return value ? "true" : "false";
@@ -74,7 +74,7 @@ namespace bg_helper {
             buffer.append(END_SYMBOL);
             return buffer;
         };
-        if constexpr (std::is_same_v<wchar_t, T>) {
+        if constexpr (std::is_same_v<wchar_t, char_type>) {
             return func(bg_helper::CONTAINER_START_SYMBOL_L, bg_helper::CONTAINER_END_SYMBOL_L, bg_helper::CONTAINER_SPLIT_SYMBOL_L);
         } else {
             return func(bg_helper::CONTAINER_START_SYMBOL, bg_helper::CONTAINER_END_SYMBOL, bg_helper::CONTAINER_SPLIT_SYMBOL);

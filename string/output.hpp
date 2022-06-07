@@ -13,18 +13,19 @@ namespace bg_helper {
         if constexpr (std::is_same_v<char_type, char>) {
             printf("%s", buffer.c_str());
         } else {
-            wprintf(L"%s", buffer.c_str());
+            wprintf(L"%ls", buffer.c_str());
         }
     }
 
-    template<typename ...Args>
+    template<Character char_type = bg_helper::char_type,
+        typename ...Args>
     void println(const Args& ...v) {
         if constexpr (std::is_same_v<char_type, char>) {
             const auto buffer = concat<char_type>(v...);
             printf("%s\n", buffer.c_str());
         } else {
             const auto buffer = concat<char_type>(v...);
-            wprintf(L"%s\n", buffer.c_str());
+            wprintf(L"%ls\n", buffer.c_str());
         }
     }
 
