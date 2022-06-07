@@ -13,6 +13,14 @@ namespace bg_helper {
     using char_type = char;
 #endif
 
+    // const value
+    constexpr std::string_view CONTAINER_START_SYMBOL = "[";
+    constexpr std::string_view CONTAINER_END_SYMBOL = "]";
+    constexpr std::string_view CONTAINER_SPLIT_SYMBOL = ", ";
+    constexpr std::wstring_view CONTAINER_START_SYMBOL_L = L"[";
+    constexpr std::wstring_view CONTAINER_END_SYMBOL_L = L"]";
+    constexpr std::wstring_view CONTAINER_SPLIT_SYMBOL_L = L", ";
+
     template<typename T>
     concept Character = std::is_same_v<T, char> || std::is_same_v<T, wchar_t>;
     
@@ -22,13 +30,6 @@ namespace bg_helper {
     template<typename T>
     concept Boolean = std::is_same_v<bool, std::decay_t<T>>;
     
-    template<typename T>
-    concept Iterable = requires(T a)
-    {
-        { a.begin() } -> std::same_as<typename T::iterator>;
-        { a.end() } -> std::same_as<typename T::iterator>;
-    };
-
     template<typename T> concept String = 
         std::is_same_v<T, std::string> || std::is_same_v<T, std::wstring> ||
         std::is_same_v<T, std::string_view> || std::is_same_v<T, std::wstring_view>;

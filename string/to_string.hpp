@@ -2,6 +2,8 @@
 #define _BGHELPER_TO_STRING_H
 
 #include "core.hpp"
+#include <ranges>
+#include <iomanip>
 #include <string>
 
 namespace bg_helper {
@@ -43,26 +45,37 @@ namespace bg_helper {
     }
 
     template<Character char_type = bg_helper::char_type,
-        Iterable T>
+        std::ranges::range T>
     [[nodiscard]] inline 
     std::enable_if_t<!String<T>, std::basic_string<char_type>>
     to_string(const T &value) noexcept {
-        auto func = [&](const char_type START_SYMBOL, const char_type END_SYMBOL, const char_type SPLIT_CHAR) {
+        using string_view = std::basic_string_view<char_type>;
+        auto func = [&](const string_view START_SYMBOL, const string_view END_SYMBOL, const string_view SPLIT_CHAR) {
             std::basic_string<char_type> buffer;
-            buffer.push_back(START_SYMBOL);
+            buffer.append(START_SYMBOL);
             for (auto &&e : value) {
-                buffer.append(to_string<char_type>(e));
-                buffer.push_back(SPLIT_CHAR);
+                if constexpr (String<typename T::value_type>) {
+                    buffer.append(connect("\"", to_string<char_type>(e), "\""));
+                } else {
+                    buffer.append(to_string<char_type>(e));
+                }
+                buffer.append(SPLIT_CHAR);
             }
-            buffer.pop_back();
-            buffer.push_back(END_SYMBOL);
+            buffer.erase(buffer.size() - SPLIT_CHAR.size());
+            buffer.append(END_SYMBOL);
             return buffer;
         };
         if constexpr (std::is_same_v<wchar_t, T>) {
-            return func(L'[', L']', L',');
+            return func(bg_helper::CONTAINER_START_SYMBOL_L, bg_helper::CONTAINER_END_SYMBOL_L, bg_helper::CONTAINER_SPLIT_SYMBOL_L);
         } else {
-            return func('[', ']', ',');
+            return func(bg_helper::CONTAINER_START_SYMBOL, bg_helper::CONTAINER_END_SYMBOL, bg_helper::CONTAINER_SPLIT_SYMBOL);
         }
+    }
+
+    template<Character char_type = bg_helper::char_type>
+    [[nodiscard]] inline std::basic_string<char_type>&& to_string(std::basic_string<char_type> &&value) noexcept
+    {
+        return std::forward<std::basic_string<char_type>&&>(value);
     }
 
 
