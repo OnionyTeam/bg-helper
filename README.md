@@ -17,6 +17,7 @@ It provides conversion between **many type**s and strings, including
 ```c++
 #include "../string/to_string.hpp"
 #include <iostream>
+#include <vector>
 
 int main()
 {
@@ -52,6 +53,7 @@ Actually, it is a combination of bg_helper::connect() and bg_helper::to_string()
 ```c++
 #include "../string/string_concat.hpp"
 #include <iostream>
+#include <vector>
 
 int main()
 {

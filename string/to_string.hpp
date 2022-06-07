@@ -7,20 +7,19 @@
 #include <string>
 
 namespace bg_helper {
+
     template<Character char_type = bg_helper::char_type,
         std::convertible_to<std::basic_string_view<char_type>> T>
     [[nodiscard]] inline std::basic_string<char_type> to_string(const T &value) noexcept {
-        return std::basic_string<char_type> { value };
+        return std::basic_string<char_type>(value);
     }
 
-    template<Character char_type = bg_helper::char_type,
-        Float T>
-    [[nodiscard]] inline std::basic_string<char_type> to_string(const T value) noexcept {
-        if constexpr (std::is_same_v<wchar_t, T>) {
-            return std::to_wstring(value);
-        } else {
-            return std::to_string(value);
-        }
+
+
+    template<Character char_type = bg_helper::char_type>
+    [[nodiscard]] inline std::basic_string<char_type>&& to_string(std::basic_string<char_type> &&value) noexcept
+    {
+        return std::forward<std::basic_string<char_type>&&>(value);
     }
 
     template<Character char_type = bg_helper::char_type,
@@ -34,12 +33,22 @@ namespace bg_helper {
     }
 
     template<Character char_type = bg_helper::char_type,
+        Float T>
+    [[nodiscard]] inline std::basic_string<char_type> to_string(const T value) noexcept {
+        if constexpr (std::is_same_v<wchar_t, T>) {
+            return std::to_wstring(value);
+        } else {
+            return std::to_string(value);
+        }
+    }
+
+    template<Character char_type = bg_helper::char_type,
         Boolean T>
     [[nodiscard]] inline std::basic_string<char_type> to_string(const T value) noexcept {
         if constexpr (std::is_same_v<wchar_t, T>) {
-            return value ? L"True" : L"False";
+            return value ? L"frue" : L"false";
         } else {
-            return value ? "True" : "False";
+            return value ? "true" : "false";
         }
         
     }
@@ -70,12 +79,6 @@ namespace bg_helper {
         } else {
             return func(bg_helper::CONTAINER_START_SYMBOL, bg_helper::CONTAINER_END_SYMBOL, bg_helper::CONTAINER_SPLIT_SYMBOL);
         }
-    }
-
-    template<Character char_type = bg_helper::char_type>
-    [[nodiscard]] inline std::basic_string<char_type>&& to_string(std::basic_string<char_type> &&value) noexcept
-    {
-        return std::forward<std::basic_string<char_type>&&>(value);
     }
 
 

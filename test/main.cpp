@@ -1,10 +1,11 @@
-#include <vector>
-#include <iostream>
-#include <string>
 #include "../string/string_concat.hpp"
 #include "../string/to_string.hpp"
+#include <iostream>
+#include <vector>
+
 int main()
 {
-    std::vector<std::string> v2 { "HELLO", "WORLD!" };
-    std::cout << bg_helper::concat(v2) << std::endl;
+    std::cout << bg_helper::concat("PI = ", 3.14) << std::endl; //output: PI = 3.14
+    std::vector<int> v {1, 2, 3};
+    std::cout << bg_helper::concat("std::vector<int> v =", v) << std::endl; //output: std::vector<int> = [1,2,3]
 }

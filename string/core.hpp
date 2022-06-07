@@ -31,8 +31,8 @@ namespace bg_helper {
     concept Boolean = std::is_same_v<bool, std::decay_t<T>>;
     
     template<typename T> concept String = 
-        std::is_same_v<T, std::string> || std::is_same_v<T, std::wstring> ||
-        std::is_same_v<T, std::string_view> || std::is_same_v<T, std::wstring_view>;
+        std::convertible_to<T, std::string_view> ||
+        std::convertible_to<T, std::wstring_view>;
 } // bg_helper
 
 #endif //_BGHELPER_CORE_H
