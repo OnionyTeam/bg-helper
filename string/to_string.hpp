@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <ranges>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 namespace bg_helper {
@@ -68,17 +69,21 @@ to_string(const T &value) noexcept {
 		buffer.emplace_back(START_SYMBOL);
 		for (auto &&e : value) {
 			if constexpr (String<typename T::value_type>) {
-				buffer.emplace_back(connect<char_type_t>(
-					"\"", to_string<char_type_t>(e), "\""));
+				if constexpr (std::is_same_v<wchar_t, char_type_t>) {
+					buffer.emplace_back(connect<char_type_t>(
+						L"\"", to_string<char_type_t>(e), L"\""));
+				} else {
+					buffer.emplace_back(connect<char_type_t>(
+						"\"", to_string<char_type_t>(e), "\""));
+				}
 			} else {
-				buffer.emplace_back(connect<char_type_t>(
-					L"\"", to_string<char_type_t>(e), L"\""));
+				buffer.emplace_back(to_string<char_type_t>(e));
 			}
 			buffer.emplace_back(SPLIT_CHAR);
 		}
 		buffer.pop_back();
 		buffer.emplace_back(END_SYMBOL);
-		return connect<char_type_t>(buffer);
+		return connect<char_type_t, decltype(buffer)>(buffer);
 	};
 	if constexpr (std::is_same_v<wchar_t, char_type_t>) {
 		return func(bg_helper::CONTAINER_START_SYMBOL_L,
