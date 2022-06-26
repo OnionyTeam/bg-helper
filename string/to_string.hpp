@@ -64,6 +64,12 @@ to_string(const double &value) noexcept {
 	}
 }
 
+template <Character char_type_t = bg_helper::char_type, has_to_string T>
+[[nodiscard]] __attribute__((always_inline)) inline std::basic_string<char_type>
+to_string(T &t) {
+	return t.to_string();
+}
+
 template <Character char_type_t = bg_helper::char_type, Boolean T>
 [[nodiscard]] __attribute__((
 	always_inline)) inline std::basic_string<char_type_t>

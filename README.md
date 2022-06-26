@@ -34,7 +34,7 @@ int main()
     // Do anything
 }
 
-// output: It took xxx millisecond to call int main() function in xxxx
+// output: It took xxx millisecond to call xxx function in xxxx
 ```
 
 ### to string (bg_helper::to_string)

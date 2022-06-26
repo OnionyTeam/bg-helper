@@ -33,6 +33,7 @@ template <Character char_type_t = bg_helper::char_type> class Format {
 		return *this;
 	};
 
+	const std::basic_string<char_type_t> &to_string() const { return buffer; }
 	std::basic_string<char_type_t> to_string() { return buffer; }
 
 	friend std::ostream &operator<<(std::ostream &os, Format &f) {
