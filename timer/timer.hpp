@@ -20,8 +20,8 @@ class Timer {
 		auto end_time = std::chrono::system_clock::now();
 		auto spend_time = std::chrono::duration_cast<std::chrono::microseconds>(
 			end_time - _start_time);
-		printf("It took %ld milliseconds to call %s function in %s file\n",
-			   spend_time, _location.function_name(), _location.file_name());
+		printf("It took %ldus to call %s function in %s\n", spend_time,
+			   _location.function_name(), _location.file_name());
 	}
 };
 

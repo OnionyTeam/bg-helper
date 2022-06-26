@@ -1,10 +1,40 @@
 # bg-helper
-一个提供诸多类型的to_string方法集以及其可变参拼接字串方法
+A *POWERFUL* toolset!!!
+Uses many features that are only available in C++20
+
 
 ## BUILD
 ...
 
 ## How to use?
+
+### Format
+
+```c++
+#include "string/output.hpp"
+#include <iostream>
+
+int main()
+{
+    bg_helper::Format f;
+    f | "PI = " | 3.1415926535897;
+    std::cout << f << std::endl; //output: PI = 3.1415926535897
+}
+```
+
+### Timer
+
+```c++
+#include "timer/timer.hpp"
+
+int main()
+{
+    Timer t;
+    // Do anything
+}
+
+// output: It took xxx millisecond to call int main() function in xxxx
+```
 
 ### to string (bg_helper::to_string)
 
