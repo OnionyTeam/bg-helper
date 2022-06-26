@@ -1,11 +1,29 @@
 #ifndef _BGHELPER_TIMER_H__
 #define _BGHELPER_TIMER_H__
 
-#include "../string/to_string.hpp"
 #include <bits/chrono.h>
 #include <chrono>
 #include <cstdio>
 #include <functional>
+#include <iostream>
+#include <source_location>
+
+class Timer {
+  private:
+	std::source_location _location;
+	std::chrono::system_clock::time_point _start_time;
+
+  public:
+	Timer(const std::source_location location = std::source_location::current())
+		: _location(location), _start_time(std::chrono::system_clock::now()) {}
+	~Timer() {
+		auto end_time = std::chrono::system_clock::now();
+		auto spend_time = std::chrono::duration_cast<std::chrono::microseconds>(
+			end_time - _start_time);
+		printf("It took %ld milliseconds to call %s function in %s file",
+			   spend_time, _location.function_name(), _location.file_name());
+	}
+};
 
 template <class callable, class... Args>
 void _get_time_with_args(callable f, const char *func_name,
@@ -14,7 +32,7 @@ void _get_time_with_args(callable f, const char *func_name,
 		std::bind(std::forward<callable>(f), std::forward<Args>(args)...));
 
 	auto start_time = std::chrono::system_clock::now();
-	task();
+	task(std::forward<Args>(args)...);
 	auto end_time = std::chrono::system_clock::now();
 	auto spend_time = std::chrono::duration_cast<std::chrono::microseconds>(
 		end_time - start_time);

@@ -5,6 +5,7 @@
 #include <vector>
 
 int main() {
+	Timer t;
 	std::vector<int> a;
 	for (int i = 0; i <= 100000; ++i) {
 		a.push_back(i);
@@ -29,6 +30,4 @@ int main() {
 			}
 		}
 	};
-	get_time(search_vector);
-	get_time(search_list);
 }
