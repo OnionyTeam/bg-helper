@@ -104,7 +104,8 @@ to_string(const T &value) noexcept {
 			}
 			buffer.append(SPLIT_CHAR);
 		}
-		buffer.erase(buffer.size() - SPLIT_CHAR.size());
+		if (size > 0)
+			buffer.erase(buffer.size() - SPLIT_CHAR.size());
 		buffer.append(END_SYMBOL);
 		return buffer;
 	};
