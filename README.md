@@ -1,6 +1,7 @@
 # bg-helper
 A *POWERFUL* toolset!!!
-Uses many features that are only available in C++20
+
+*Uses many features that are only available in C++20*
 
 
 ## BUILD
