@@ -13,10 +13,9 @@
 
 namespace bg_helper {
 
-class Format {
+template <Character char_type_t = bg_helper::char_type> class Format {
   public:
-	const static size_t DEFUALT_SIZE = 100;
-	using char_type_t = char;
+	const static size_t DEFUALT_SIZE = 30;
 
   private:
 	/* std::list<std::basic_string<char_type>> source; */
@@ -28,16 +27,8 @@ class Format {
 		buffer.reserve(DEFUALT_SIZE);
 		buffer.append(std::move(bg_helper::concat(args...)));
 	}
-	/* template <typename T> */
-	/* Format &operator,(const std::basic_string_view<char_type_t> &t) { */
-	/* 	buffer.append(std::move(t)); */
-	/* 	return *this; */
-	/* }; */
-	template <typename T> Format &operator,(const T &&t) {
-		buffer.append(bg_helper::to_string<char_type_t>(std::forward(t)));
-		return *this;
-	};
-	template <typename T> Format &operator,(const T &t) {
+
+	template <typename T> Format &operator|(const T &t) {
 		buffer.append(bg_helper::to_string<char_type_t>(t));
 		return *this;
 	};

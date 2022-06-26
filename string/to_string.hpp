@@ -2,6 +2,7 @@
 #define _BGHELPER_TO_STRING_H__
 
 #include "core.hpp"
+#include "milo/dtoa_milo.h"
 #include "string_concat.hpp"
 #include <iomanip>
 #include <ranges>
@@ -30,7 +31,7 @@ template <
 	typename = std::enable_if_t<!Boolean<T>, std::basic_string<char_type>>>
 [[nodiscard]] __attribute__((
 	always_inline)) inline std::basic_string<char_type_t>
-to_string(const T value) noexcept {
+to_string(const T &value) noexcept {
 	if constexpr (std::is_same_v<wchar_t, char_type_t>) {
 		return std::to_wstring(value);
 	} else {
@@ -38,13 +39,27 @@ to_string(const T value) noexcept {
 	}
 }
 
-template <Character char_type_t = bg_helper::char_type, Float T>
+template <Character char_type_t = bg_helper::char_type>
 [[nodiscard]] __attribute__((
 	always_inline)) inline std::basic_string<char_type_t>
-to_string(const T value) noexcept {
+to_string(const float &value) noexcept {
 	if constexpr (std::is_same_v<wchar_t, char_type_t>) {
 		return std::to_wstring(value);
 	} else {
+		return std::to_string(value);
+	}
+}
+
+template <Character char_type_t = bg_helper::char_type>
+[[nodiscard]] __attribute__((
+	always_inline)) inline std::basic_string<char_type_t>
+to_string(const double &value) noexcept {
+	if constexpr (std::is_same_v<wchar_t, char_type_t>) {
+		return std::to_wstring(value);
+	} else {
+		char buff[50];
+		dtoa_milo(value, buff);
+		return std::string(buff);
 		return std::to_string(value);
 	}
 }
