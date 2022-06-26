@@ -1,33 +1,34 @@
+#include "../string/output.hpp"
 #include "timer.hpp"
-#include <iostream>
-#include <list>
-#include <ostream>
+#include <sstream>
+#include <string>
 #include <vector>
 
-int main() {
+const int MAX_SIZE = 10;
+
+void stringstream_test() {
+	std::stringstream s;
+
 	Timer t;
-	std::vector<int> a;
-	for (int i = 0; i <= 100000; ++i) {
-		a.push_back(i);
+	for (int i = 0; i < MAX_SIZE; ++i) {
+		s << "ABCDEFGHIJSJDLDJLSJDSDJSDLKDJKLSDJ";
 	}
+	std::cout << "stringstream output: " << s.str() << std::endl;
+}
 
-	std::list<int> b;
-	for (int i = 0; i <= 100000; ++i) {
-		b.push_back(i);
+void format_test() {
+
+	bg_helper::Format f;
+	Timer t;
+
+	for (int i = 0; i < MAX_SIZE; ++i) {
+		/* ss.append("A"); */
+		f, "ABCDEFGHIJSJDLDJLSJDSDJSDLKDJKLSDJ";
 	}
+	std::cout << "bg_helper::Format output: " << f << std::endl;
+}
 
-	auto search_vector = [&]() {
-		for (auto &&e : a) {
-			if (e == 100000) {
-				std::cout << "Found 100000!" << std::endl;
-			}
-		}
-	};
-	auto search_list = [&]() {
-		for (auto &&e : b) {
-			if (e == 100000) {
-				std::cout << "Found 100000!" << std::endl;
-			}
-		}
-	};
+int main() {
+	stringstream_test();
+	format_test();
 }

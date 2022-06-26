@@ -14,35 +14,31 @@
 namespace bg_helper {
 
 class Format {
+  public:
+	const static size_t DEFUALT_SIZE = 100;
 	using char_type_t = char;
 
   private:
-	std::list<std::basic_string<char_type>> source;
+	/* std::list<std::basic_string<char_type>> source; */
 	std::basic_string<char_type_t> buffer;
-	bool has_changed;
 
   public:
-	Format() : source(), buffer() {}
-	template <typename... Args> Format(const Args &...args) : buffer() {
-		source.emplace_back(bg_helper::concat(args...));
-		has_changed = true;
+	Format() { buffer.reserve(DEFUALT_SIZE); }
+	template <typename... Args> Format(const Args &...args) {
+		buffer.reserve(DEFUALT_SIZE);
+		buffer.append(bg_helper::concat(args...));
 	}
-	template <typename T> Format &operator,(T &t) {
-		source.emplace_back(bg_helper::to_string<char_type_t>(t));
-		has_changed = true;
-		return *this;
-	};
-	template <typename T> Format &operator,(T &&t) {
-		source.emplace_back(bg_helper::to_string<char_type_t>(std::move(t)));
-		has_changed = true;
+	/* template <typename T> */
+	/* Format &operator,(const std::basic_string_view<char_type_t> &t) { */
+	/* 	buffer.append(std::move(t)); */
+	/* 	return *this; */
+	/* }; */
+	template <typename T> Format &operator,(const T &t) {
+		buffer.append(bg_helper::to_string<char_type_t>(t));
 		return *this;
 	};
 
-	std::basic_string<char_type_t> to_string() {
-		if (has_changed)
-			buffer = connect<char_type_t>(source);
-		return buffer;
-	}
+	std::basic_string<char_type_t> to_string() { return buffer; }
 
 	friend std::ostream &operator<<(std::ostream &os, Format &f) {
 		os << f.to_string();

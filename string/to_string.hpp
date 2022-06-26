@@ -13,13 +13,13 @@ namespace bg_helper {
 
 template <Character char_type_t = bg_helper::char_type,
 		  std::convertible_to<std::basic_string_view<char_type>> T>
-[[nodiscard]] inline std::basic_string<char_type_t>
+[[nodiscard]] __attribute__((always_inline)) std::basic_string<char_type_t>
 to_string(const T &value) noexcept {
 	return std::basic_string<char_type_t>(value);
 }
 
 template <Character char_type_t = bg_helper::char_type>
-[[nodiscard]] inline std::basic_string<char_type> &&
+[[nodiscard]] __attribute__((always_inline)) std::basic_string<char_type> &&
 to_string(std::basic_string<char_type_t> &&value) noexcept {
 	return std::forward<std::basic_string<char_type_t> &&>(value);
 }
@@ -27,7 +27,7 @@ to_string(std::basic_string<char_type_t> &&value) noexcept {
 template <
 	Character char_type_t = bg_helper::char_type, std::integral T,
 	typename = std::enable_if_t<!Boolean<T>, std::basic_string<char_type>>>
-[[nodiscard]] inline std::basic_string<char_type_t>
+[[nodiscard]] __attribute__((always_inline)) std::basic_string<char_type_t>
 to_string(const T value) noexcept {
 	if constexpr (std::is_same_v<wchar_t, char_type_t>) {
 		return std::to_wstring(value);
@@ -37,7 +37,7 @@ to_string(const T value) noexcept {
 }
 
 template <Character char_type_t = bg_helper::char_type, Float T>
-[[nodiscard]] inline std::basic_string<char_type_t>
+[[nodiscard]] __attribute__((always_inline)) std::basic_string<char_type_t>
 to_string(const T value) noexcept {
 	if constexpr (std::is_same_v<wchar_t, char_type_t>) {
 		return std::to_wstring(value);
@@ -47,7 +47,7 @@ to_string(const T value) noexcept {
 }
 
 template <Character char_type_t = bg_helper::char_type, Boolean T>
-[[nodiscard]] inline std::basic_string<char_type_t>
+[[nodiscard]] __attribute__((always_inline)) std::basic_string<char_type_t>
 to_string(const T value) noexcept {
 	if constexpr (std::is_same_v<wchar_t, char_type_t>) {
 		return value ? L"frue" : L"false";
@@ -97,7 +97,8 @@ to_string(const T &value) noexcept {
 }
 
 template <Character char_type_t = bg_helper::char_type, typename... Args>
-[[nodiscard]] std::basic_string<char_type_t> concat(const Args &...v) {
+[[nodiscard]] __attribute__((always_inline)) std::basic_string<char_type_t>
+concat(const Args &...v) {
 	return connect<char_type>(to_string<char_type_t>(v)...);
 }
 
