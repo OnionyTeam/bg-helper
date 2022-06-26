@@ -17,16 +17,13 @@ namespace bg_helper {
  *     connect("A", "B", "C") --> "ABC"
  */
 template <Character char_type_t = bg_helper::char_type, typename... Args>
-[[nodiscard]] std::basic_string<char_type_t> connect(const Args &...args) {
-	size_t len = 0;
-	for (auto s : {args...})
-		len += std::basic_string_view<char_type_t>(s).size();
-
-	std::string result;
-	result.reserve(len); // <--- preallocate result
-	for (auto s : {args...})
-		result += s;
-	return result;
+[[nodiscard]] std::basic_string<char_type_t> connect(const Args &...v) {
+	std::basic_string<char_type_t> buffer;
+	std::size_t size{};
+	((size += std::basic_string_view<char_type_t>(v).size()), ...);
+	buffer.reserve(size);
+	((buffer += std::basic_string_view<char_type_t>(v)), ...);
+	return buffer;
 }
 
 template <Character char_type_t = bg_helper::char_type,

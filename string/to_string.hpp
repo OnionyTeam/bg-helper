@@ -13,21 +13,23 @@ namespace bg_helper {
 
 template <Character char_type_t = bg_helper::char_type,
 		  std::convertible_to<std::basic_string_view<char_type>> T>
-[[nodiscard]] __attribute__((always_inline)) std::basic_string<char_type_t>
+[[nodiscard]] __attribute__((
+	always_inline)) inline std::basic_string<char_type_t>
 to_string(const T &value) noexcept {
 	return std::basic_string<char_type_t>(value);
 }
 
 template <Character char_type_t = bg_helper::char_type>
-[[nodiscard]] __attribute__((always_inline)) std::basic_string<char_type> &&
-to_string(std::basic_string<char_type_t> &&value) noexcept {
+[[nodiscard]] __attribute__((always_inline)) inline std::basic_string<char_type>
+	&&to_string(std::basic_string<char_type_t> &&value) noexcept {
 	return std::forward<std::basic_string<char_type_t> &&>(value);
 }
 
 template <
 	Character char_type_t = bg_helper::char_type, std::integral T,
 	typename = std::enable_if_t<!Boolean<T>, std::basic_string<char_type>>>
-[[nodiscard]] __attribute__((always_inline)) std::basic_string<char_type_t>
+[[nodiscard]] __attribute__((
+	always_inline)) inline std::basic_string<char_type_t>
 to_string(const T value) noexcept {
 	if constexpr (std::is_same_v<wchar_t, char_type_t>) {
 		return std::to_wstring(value);
@@ -37,7 +39,8 @@ to_string(const T value) noexcept {
 }
 
 template <Character char_type_t = bg_helper::char_type, Float T>
-[[nodiscard]] __attribute__((always_inline)) std::basic_string<char_type_t>
+[[nodiscard]] __attribute__((
+	always_inline)) inline std::basic_string<char_type_t>
 to_string(const T value) noexcept {
 	if constexpr (std::is_same_v<wchar_t, char_type_t>) {
 		return std::to_wstring(value);
@@ -47,7 +50,8 @@ to_string(const T value) noexcept {
 }
 
 template <Character char_type_t = bg_helper::char_type, Boolean T>
-[[nodiscard]] __attribute__((always_inline)) std::basic_string<char_type_t>
+[[nodiscard]] __attribute__((
+	always_inline)) inline std::basic_string<char_type_t>
 to_string(const T value) noexcept {
 	if constexpr (std::is_same_v<wchar_t, char_type_t>) {
 		return value ? L"frue" : L"false";
@@ -65,25 +69,29 @@ to_string(const T &value) noexcept {
 	auto func = [&](const string_view START_SYMBOL,
 					const string_view END_SYMBOL,
 					const string_view SPLIT_CHAR) {
-		std::vector<std::basic_string<char_type_t>> buffer;
-		buffer.emplace_back(START_SYMBOL);
+		std::basic_string<char_type_t> buffer;
+		auto size = value.size();
+		if (size > 10) {
+			buffer.reserve(size * 2);
+		}
+		buffer.append(START_SYMBOL);
 		for (auto &&e : value) {
 			if constexpr (String<typename T::value_type>) {
 				if constexpr (std::is_same_v<wchar_t, char_type_t>) {
-					buffer.emplace_back(connect<char_type_t>(
+					buffer.append(connect<char_type_t>(
 						L"\"", to_string<char_type_t>(e), L"\""));
 				} else {
-					buffer.emplace_back(connect<char_type_t>(
+					buffer.append(connect<char_type_t>(
 						"\"", to_string<char_type_t>(e), "\""));
 				}
 			} else {
-				buffer.emplace_back(to_string<char_type_t>(e));
+				buffer.append(to_string<char_type_t>(e));
 			}
-			buffer.emplace_back(SPLIT_CHAR);
+			buffer.append(SPLIT_CHAR);
 		}
-		buffer.pop_back();
-		buffer.emplace_back(END_SYMBOL);
-		return connect<char_type_t, decltype(buffer)>(buffer);
+		buffer.erase(buffer.size() - SPLIT_CHAR.size());
+		buffer.append(END_SYMBOL);
+		return buffer;
 	};
 	if constexpr (std::is_same_v<wchar_t, char_type_t>) {
 		return func(bg_helper::CONTAINER_START_SYMBOL_L,
@@ -97,7 +105,8 @@ to_string(const T &value) noexcept {
 }
 
 template <Character char_type_t = bg_helper::char_type, typename... Args>
-[[nodiscard]] __attribute__((always_inline)) std::basic_string<char_type_t>
+[[nodiscard]] __attribute__((
+	always_inline)) inline std::basic_string<char_type_t>
 concat(const Args &...v) {
 	return connect<char_type>(to_string<char_type_t>(v)...);
 }

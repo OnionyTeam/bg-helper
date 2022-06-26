@@ -26,13 +26,17 @@ class Format {
 	Format() { buffer.reserve(DEFUALT_SIZE); }
 	template <typename... Args> Format(const Args &...args) {
 		buffer.reserve(DEFUALT_SIZE);
-		buffer.append(bg_helper::concat(args...));
+		buffer.append(std::move(bg_helper::concat(args...)));
 	}
 	/* template <typename T> */
 	/* Format &operator,(const std::basic_string_view<char_type_t> &t) { */
 	/* 	buffer.append(std::move(t)); */
 	/* 	return *this; */
 	/* }; */
+	template <typename T> Format &operator,(const T &&t) {
+		buffer.append(bg_helper::to_string<char_type_t>(std::forward(t)));
+		return *this;
+	};
 	template <typename T> Format &operator,(const T &t) {
 		buffer.append(bg_helper::to_string<char_type_t>(t));
 		return *this;
@@ -50,7 +54,7 @@ template <Character char_type_t = bg_helper::char_type, typename... Args>
 void print(const Args &...v) {
 	const auto buffer = concat<char_type_t>(v...);
 	if constexpr (std::is_same_v<char_type_t, char>) {
-		printf("%s", buffer.c_str());
+		puts(buffer.c_str());
 	} else {
 		wprintf(L"%ls", buffer.c_str());
 	}
@@ -60,7 +64,8 @@ template <Character char_type_t = bg_helper::char_type, typename... Args>
 void println(const Args &...v) {
 	if constexpr (std::is_same_v<char_type_t, char>) {
 		const auto buffer = concat<char_type_t>(v...);
-		printf("%s\n", buffer.c_str());
+		puts(buffer.c_str());
+		puts("\n");
 	} else {
 		const auto buffer = concat<char_type_t>(v...);
 		wprintf(L"%ls\n", buffer.c_str());
