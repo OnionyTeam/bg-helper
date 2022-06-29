@@ -18,7 +18,6 @@ template <Character char_type_t = bg_helper::char_type> class Format {
 	const static size_t DEFUALT_SIZE = 30;
 
   private:
-	/* std::list<std::basic_string<char_type>> source; */
 	std::basic_string<char_type_t> buffer;
 
   public:
@@ -36,7 +35,7 @@ template <Character char_type_t = bg_helper::char_type> class Format {
 	const std::basic_string<char_type_t> &to_string() const { return buffer; }
 	std::basic_string<char_type_t> to_string() { return buffer; }
 
-	friend std::ostream &operator<<(std::ostream &os, Format &f) {
+	friend std::ostream &operator<<(std::ostream &os, const Format &f) {
 		os << f.to_string();
 		return os;
 	}

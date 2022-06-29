@@ -1,8 +1,7 @@
-#include "output.hpp"
-#include <iostream>
+#include "to_string.hpp"
+#include <bits/stdc++.h>
 
 int main() {
-	bg_helper::Format f;
-	f, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3;
-	std::cout << f << std::endl;
+	std::tuple<std::string, std::string> t{"A", "Alen"};
+	std::cout << bg_helper::to_string(t) << std::endl;
 }

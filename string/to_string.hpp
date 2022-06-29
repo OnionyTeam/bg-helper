@@ -38,7 +38,6 @@ to_string(const T &value) noexcept {
 		return std::to_string(value);
 	}
 }
-
 template <Character char_type_t = bg_helper::char_type>
 [[nodiscard]] __attribute__((
 	always_inline)) inline std::basic_string<char_type_t>
@@ -48,6 +47,19 @@ to_string(const float &value) noexcept {
 	} else {
 		return std::to_string(value);
 	}
+}
+
+template <Character char_type_t = bg_helper::char_type, typename T, typename E>
+[[nodiscard]] __attribute__((
+	always_inline)) inline std::basic_string<char_type_t>
+to_string(const std::pair<T, E> &value) {
+	std::basic_string<char_type_t> buff;
+	buff.push_back('(');
+	buff.append(to_string(value.first));
+	buff.append(",");
+	buff.append(to_string(value.second));
+	buff.push_back(')');
+	return buff;
 }
 
 template <Character char_type_t = bg_helper::char_type>
@@ -97,7 +109,7 @@ to_string(const T &value) noexcept {
 		}
 		buffer.append(START_SYMBOL);
 		for (auto &&e : value) {
-			if constexpr (String<typename T::value_type>) {
+			if (String<typename T::value_type>) {
 				if constexpr (std::is_same_v<wchar_t, char_type_t>) {
 					buffer.append(connect<char_type_t>(
 						L"\"", to_string<char_type_t>(e), L"\""));
@@ -124,6 +136,34 @@ to_string(const T &value) noexcept {
 					bg_helper::CONTAINER_END_SYMBOL,
 					bg_helper::CONTAINER_SPLIT_SYMBOL);
 	}
+}
+
+template <Character char_type_t, typename T, size_t N> struct tuple_to_string {
+	static void to_string(const T &tup, std::basic_string<char_type_t> &buff) {
+		tuple_to_string<char_type_t, T, N - 1>::to_string(tup, buff);
+		buff.append(",");
+		buff.append(bg_helper::to_string<char_type_t>(std::get<N - 1>(tup)));
+	}
+};
+
+template <Character char_type_t, typename T>
+struct tuple_to_string<char_type_t, T, 1> {
+	static void to_string(const T &tup, std::basic_string<char_type_t> &buff) {
+		buff.append(bg_helper::to_string<char_type_t>(std::get<0>(tup)));
+	}
+};
+
+template <Character char_type_t = bg_helper::char_type, typename... Args>
+[[nodiscard]] __attribute__((
+	always_inline)) inline std::basic_string<char_type_t>
+to_string(const std::tuple<Args...> &value) {
+	constexpr size_t size = sizeof...(Args);
+	static_assert(size < 20, "too large tuple!!!");
+	std::basic_string<char_type_t> buff;
+	buff.append("(");
+	tuple_to_string<char_type_t, decltype(value), size>::to_string(value, buff);
+	buff.append(")");
+	return buff;
 }
 
 template <Character char_type_t = bg_helper::char_type, typename... Args>
