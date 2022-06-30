@@ -3,7 +3,7 @@ A *POWERFUL* toolset!!!
 
 *Uses many features that are only available in C++20*
 
-![example](https://github.com/OnionyTeam/bg-helper/tree/main/images/screenshot.jpg)
+![example](https://raw.githubusercontent.com/OnionyTeam/bg-helper/main/images/screenshot.jpg)
 
 
 ## BUILD
