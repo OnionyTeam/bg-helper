@@ -5,9 +5,13 @@
 #include <unordered_map>
 
 int main() {
+	using namespace bg_helper;
 	Timer t;
-	std::vector<std::vector<std::string>> m;
-	for (int i = 0; i < 1000; ++i)
-		m.push_back({"A", "B"});
-	std::cout << bg_helper::to_string(m) << std::endl;
+	std::tuple m = {1,
+					2,
+					3,
+					4,
+					std::make_tuple(3.1415, 9265, "sdad"),
+					std::vector<std::string>({"Hello", ",", " world!"})};
+	std::cout << to_string(m) << std::endl;
 }

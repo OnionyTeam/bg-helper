@@ -29,13 +29,6 @@ concept String = std::convertible_to<T, std::string_view> ||
 	std::convertible_to<T, std::wstring_view>;
 
 template <typename T>
-concept Map = requires(T a) {
-	a.begin();
-	a.end();
-	a.contains();
-};
-
-template <typename T>
 concept has_to_string = requires(T a) {
 	a.to_string();
 };
@@ -46,6 +39,14 @@ constexpr const std::basic_string<char_type_t> comma() {
 		return L",";
 	else
 		return ",";
+}
+
+template <Character char_type_t = bg_helper::char_type>
+constexpr const std::basic_string<char_type_t> curly_braces(bool i) {
+	if constexpr (std::is_same_v<char_type_t, wchar_t>)
+		return i ? L"}" : L"{";
+	else
+		return i ? "}" : "{";
 }
 
 template <Character char_type_t = bg_helper::char_type>
