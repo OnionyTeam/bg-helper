@@ -45,6 +45,14 @@ connect(const Container &container) {
 	return buffer;
 }
 
+template <Character char_type_t = bg_helper::char_type>
+[[nodiscard]] std::basic_string<char_type_t>
+quoted(const std::basic_string_view<char_type_t> &v,
+	   const std::basic_string_view<char_type_t> &c =
+		   double_quotes<char_type_t>()) {
+	return connect<char_type_t>(c, v, c);
+}
+
 /**
  * Summary: connect elements to string
  * Paramters:

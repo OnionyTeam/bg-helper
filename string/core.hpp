@@ -1,6 +1,7 @@
 #ifndef _BGHELPER_CORE_H__
 #define _BGHELPER_CORE_H__
 
+#include <array>
 #include <concepts>
 #include <string>
 #include <string_view>
@@ -13,14 +14,6 @@ using char_type = wchar_t;
 #else
 using char_type = char;
 #endif
-
-// const value
-const static std::string CONTAINER_START_SYMBOL = "[";
-const static std::string CONTAINER_END_SYMBOL = "]";
-const static std::string CONTAINER_SPLIT_SYMBOL = ",";
-const static std::wstring CONTAINER_START_SYMBOL_L = L"[";
-const static std::wstring CONTAINER_END_SYMBOL_L = L"]";
-const static std::wstring CONTAINER_SPLIT_SYMBOL_L = L",";
 
 template <typename T>
 concept Character = std::is_same_v<T, char> || std::is_same_v<T, wchar_t>;
@@ -36,10 +29,48 @@ concept String = std::convertible_to<T, std::string_view> ||
 	std::convertible_to<T, std::wstring_view>;
 
 template <typename T>
+concept Map = requires(T a) {
+	a.begin();
+	a.end();
+	a.contains();
+};
+
+template <typename T>
 concept has_to_string = requires(T a) {
 	a.to_string();
 };
 
+template <Character char_type_t = bg_helper::char_type>
+constexpr const std::basic_string<char_type_t> comma() {
+	if constexpr (std::is_same_v<char_type_t, wchar_t>)
+		return L",";
+	else
+		return ",";
+}
+
+template <Character char_type_t = bg_helper::char_type>
+constexpr const std::basic_string<char_type_t> square_brakets(bool i) {
+	if constexpr (std::is_same_v<char_type_t, wchar_t>)
+		return i ? L"]" : L"[";
+	else
+		return i ? "]" : "[";
+}
+
+template <Character char_type_t = bg_helper::char_type>
+constexpr const std::basic_string<char_type_t> brakets(bool i) {
+	if constexpr (std::is_same_v<char_type_t, wchar_t>)
+		return i ? L")" : L"(";
+	else
+		return i ? ")" : "(";
+}
+
+template <Character char_type_t = bg_helper::char_type>
+constexpr const std::basic_string<char_type_t> double_quotes() {
+	if constexpr (std::is_same_v<char_type_t, wchar_t>)
+		return L"\"";
+	else
+		return "\"";
+}
 } // namespace bg_helper
 
 #endif //_BGHELPER_CORE_H__

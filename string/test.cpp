@@ -1,7 +1,13 @@
+#include "../timer/timer.hpp"
 #include "to_string.hpp"
-#include <bits/stdc++.h>
+#include <iostream>
+#include <map>
+#include <unordered_map>
 
 int main() {
-	std::tuple<std::string, std::string> t{"A", "Alen"};
-	std::cout << bg_helper::to_string(t) << std::endl;
+	Timer t;
+	std::vector<std::vector<std::string>> m;
+	for (int i = 0; i < 1000; ++i)
+		m.push_back({"A", "B"});
+	std::cout << bg_helper::to_string(m) << std::endl;
 }

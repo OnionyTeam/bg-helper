@@ -26,6 +26,16 @@ template <Character char_type_t = bg_helper::char_type>
 	return std::forward<std::basic_string<char_type_t> &&>(value);
 }
 
+template <Character char_type_t>
+std::basic_string<char_type_t>
+sourrond(const std::basic_string_view<char_type_t> source, char_type_t left,
+		 char_type_t right);
+
+template <Character char_type_t>
+std::basic_string<char_type_t>
+sourrond(const std::basic_string_view<char_type_t> source, char_type_t left,
+		 char_type_t right);
+
 template <
 	Character char_type_t = bg_helper::char_type, std::integral T,
 	typename = std::enable_if_t<!Boolean<T>, std::basic_string<char_type>>>
@@ -52,13 +62,13 @@ to_string(const float &value) noexcept {
 template <Character char_type_t = bg_helper::char_type, typename T, typename E>
 [[nodiscard]] __attribute__((
 	always_inline)) inline std::basic_string<char_type_t>
-to_string(const std::pair<T, E> &value) {
+to_string(const std::pair<T, E> &value) noexcept {
 	std::basic_string<char_type_t> buff;
-	buff.push_back('(');
+	buff.append(brakets(0));
 	buff.append(to_string(value.first));
-	buff.append(",");
+	buff.push_back(comma());
 	buff.append(to_string(value.second));
-	buff.push_back(')');
+	buff.append(brakets(1));
 	return buff;
 }
 
@@ -78,7 +88,7 @@ to_string(const double &value) noexcept {
 
 template <Character char_type_t = bg_helper::char_type, has_to_string T>
 [[nodiscard]] __attribute__((always_inline)) inline std::basic_string<char_type>
-to_string(T &t) {
+to_string(T &t) noexcept {
 	return t.to_string();
 }
 
@@ -99,49 +109,30 @@ template <Character char_type_t = bg_helper::char_type, std::ranges::range T>
 to_string(const T &value) noexcept {
 	using string_view = std::basic_string_view<char_type_t>;
 
-	auto func = [&](const string_view START_SYMBOL,
-					const string_view END_SYMBOL,
-					const string_view SPLIT_CHAR) {
-		std::basic_string<char_type_t> buffer;
-		auto size = value.size();
-		if (size > 10) {
-			buffer.reserve(size * 2);
-		}
-		buffer.append(START_SYMBOL);
-		for (auto &&e : value) {
-			if (String<typename T::value_type>) {
-				if constexpr (std::is_same_v<wchar_t, char_type_t>) {
-					buffer.append(connect<char_type_t>(
-						L"\"", to_string<char_type_t>(e), L"\""));
-				} else {
-					buffer.append(connect<char_type_t>(
-						"\"", to_string<char_type_t>(e), "\""));
-				}
-			} else {
-				buffer.append(to_string<char_type_t>(e));
-			}
-			buffer.append(SPLIT_CHAR);
-		}
-		if (size > 0)
-			buffer.erase(buffer.size() - SPLIT_CHAR.size());
-		buffer.append(END_SYMBOL);
-		return buffer;
-	};
-	if constexpr (std::is_same_v<wchar_t, char_type_t>) {
-		return func(bg_helper::CONTAINER_START_SYMBOL_L,
-					bg_helper::CONTAINER_END_SYMBOL_L,
-					bg_helper::CONTAINER_SPLIT_SYMBOL_L);
-	} else {
-		return func(bg_helper::CONTAINER_START_SYMBOL,
-					bg_helper::CONTAINER_END_SYMBOL,
-					bg_helper::CONTAINER_SPLIT_SYMBOL);
+	std::basic_string<char_type_t> buffer;
+	auto size = value.size();
+	if (size > 10) {
+		buffer.reserve(size * 3);
 	}
+	buffer.append(square_brakets(0));
+	for (auto &&e : value) {
+		if (String<typename T::value_type>)
+			buffer.append(
+				bg_helper::quoted<char_type_t>(to_string<char_type_t>(e)));
+		else
+			buffer.append(to_string<char_type_t>(e));
+		buffer.append(comma());
+	}
+	if (size > 0)
+		buffer.erase(buffer.size() - comma().size());
+	buffer.append(square_brakets(1));
+	return buffer;
 }
 
 template <Character char_type_t, typename T, size_t N> struct tuple_to_string {
 	static void to_string(const T &tup, std::basic_string<char_type_t> &buff) {
 		tuple_to_string<char_type_t, T, N - 1>::to_string(tup, buff);
-		buff.append(",");
+		buff.append(comma());
 		buff.append(bg_helper::to_string<char_type_t>(std::get<N - 1>(tup)));
 	}
 };
@@ -152,17 +143,16 @@ struct tuple_to_string<char_type_t, T, 1> {
 		buff.append(bg_helper::to_string<char_type_t>(std::get<0>(tup)));
 	}
 };
-
 template <Character char_type_t = bg_helper::char_type, typename... Args>
 [[nodiscard]] __attribute__((
 	always_inline)) inline std::basic_string<char_type_t>
 to_string(const std::tuple<Args...> &value) {
 	constexpr size_t size = sizeof...(Args);
-	static_assert(size < 20, "too large tuple!!!");
+	static_assert(size < 10, "too large tuple!!!");
 	std::basic_string<char_type_t> buff;
-	buff.append("(");
+	buff.append(brakets(0));
 	tuple_to_string<char_type_t, decltype(value), size>::to_string(value, buff);
-	buff.append(")");
+	buff.append(brakets(1));
 	return buff;
 }
 
