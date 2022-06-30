@@ -15,7 +15,7 @@ namespace bg_helper {
 
 template <Character char_type_t = bg_helper::char_type> class Format {
   public:
-	const static size_t DEFUALT_SIZE = 30;
+	const static size_t DEFUALT_SIZE = 512;
 
   private:
 	std::basic_string<char_type_t> buffer;
@@ -32,6 +32,7 @@ template <Character char_type_t = bg_helper::char_type> class Format {
 		return *this;
 	};
 
+	void clear() { buffer.clear(); }
 	const std::basic_string<char_type_t> &to_string() const { return buffer; }
 	std::basic_string<char_type_t> to_string() { return buffer; }
 

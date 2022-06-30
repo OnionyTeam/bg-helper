@@ -95,19 +95,13 @@ template <Character char_type_t = bg_helper::char_type, Boolean T>
 [[nodiscard]] __attribute__((
 	always_inline)) inline std::basic_string<char_type_t>
 to_string(const T value) noexcept {
-	if constexpr (std::is_same_v<wchar_t, char_type_t>) {
-		return value ? L"frue" : L"false";
-	} else {
-		return value ? "true" : "false";
-	}
+	return true_false<char_type_t>(value);
 }
 
 template <Character char_type_t = bg_helper::char_type, std::ranges::range T>
 [[nodiscard]] inline std::enable_if_t<!String<T>,
 									  std::basic_string<char_type_t>>
 to_string(const T &value) noexcept {
-	using string_view = std::basic_string_view<char_type_t>;
-
 	std::basic_string<char_type_t> buffer;
 	auto size = value.size();
 	if (size > 10) {

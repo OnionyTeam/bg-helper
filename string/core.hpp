@@ -66,6 +66,14 @@ constexpr const std::basic_string<char_type_t> brakets(bool i) {
 }
 
 template <Character char_type_t = bg_helper::char_type>
+constexpr const std::basic_string<char_type_t> true_false(bool i) {
+	if constexpr (std::is_same_v<char_type_t, wchar_t>)
+		return i ? L"true" : L"false";
+	else
+		return i ? "true" : "false";
+}
+
+template <Character char_type_t = bg_helper::char_type>
 constexpr const std::basic_string<char_type_t> double_quotes() {
 	if constexpr (std::is_same_v<char_type_t, wchar_t>)
 		return L"\"";
