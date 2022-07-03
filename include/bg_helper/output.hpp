@@ -10,6 +10,12 @@
 #include <ostream>
 #include <string>
 #include <utility>
+#if defined(__linux__) || defined(__APPLE__)
+#include <unistd.h>
+#endif
+#if defined(_WIN32)
+#include <windows.h>
+#endif
 
 namespace bg_helper {
 
@@ -44,22 +50,58 @@ template <Character char_type_t = bg_helper::char_type> class Format {
 
 template <Character char_type_t = bg_helper::char_type, typename... Args>
 constexpr void print(const Args &...v) {
-	const auto buffer = concat<char_type_t>(v...);
+#if defined(__linux__) || defined(__APPLE__)
 	if constexpr (std::is_same_v<char_type_t, char>) {
-		printf("%s", buffer.c_str());
+		const auto buffer = concat<char_type_t>(v...);
+		write(STDOUT_FILENO, buffer.c_str(), buffer.size());
 	} else {
-		wprintf(L"%ls", buffer.c_str());
+		const auto buffer = concat<char_type_t>(v...);
+		write(STDOUT_FILENO, buffer.c_str(),
+			  buffer.size() * sizeof(char_type_t));
 	}
+#elif defined(_WIN32)
+	if constexpr (std::is_same_v<char_type_t, char>) {
+		const auto buffer = concat<char_type_t>(v...);
+		WriteConsoleA(GetStdHandle(handle), buffer.c_str(),
+					  static_cast<unsigned long>(buffer.size()), nullptr,
+					  nullptr);
+	} else {
+		const auto buffer = concat<char_type_t>(v...);
+		write(STDOUT_FILENO, buffer.c_str(),
+			  buffer.size() * sizeof(char_type_t));
+		WriteConsoleW(GetStdHandle(handle), buffer.c_str(),
+					  static_cast<unsigned long>(buffer.size()), nullptr,
+					  nullptr);
+	}
+#endif
 }
 
 template <Character char_type_t = bg_helper::char_type, typename... Args>
 constexpr void println(const Args &...v) {
-	const auto buffer = concat<char_type_t>(v...);
+#if defined(__linux__) || defined(__APPLE__)
 	if constexpr (std::is_same_v<char_type_t, char>) {
-		printf("%s\n", buffer.c_str());
+		const auto buffer = concat<char_type_t>(v..., "\n");
+		write(STDOUT_FILENO, buffer.c_str(), buffer.size());
 	} else {
-		wprintf(L"%ls\n", buffer.c_str());
+		const auto buffer = concat<char_type_t>(v..., L"\n");
+		write(STDOUT_FILENO, buffer.c_str(),
+			  buffer.size() * sizeof(char_type_t));
 	}
+#elif defined(_WIN32)
+	if constexpr (std::is_same_v<char_type_t, char>) {
+		const auto buffer = concat<char_type_t>(v..., "\n");
+		WriteConsoleA(GetStdHandle(handle), buffer.c_str(),
+					  static_cast<unsigned long>(buffer.size()), nullptr,
+					  nullptr);
+	} else {
+		const auto buffer = concat<char_type_t>(v..., L"\n");
+		write(STDOUT_FILENO, buffer.c_str(),
+			  buffer.size() * sizeof(char_type_t));
+		WriteConsoleW(GetStdHandle(handle), buffer.c_str(),
+					  static_cast<unsigned long>(buffer.size()), nullptr,
+					  nullptr);
+	}
+#endif
 }
 
 } // namespace bg_helper

@@ -24,9 +24,6 @@ constexpr std::basic_string<char_type_t> _to_string(const T &value) noexcept {
 	return std::basic_string<char_type_t>(value);
 }
 
-template <Character char_type_t, typename T>
-constexpr std::basic_string<char_type_t> to_string(const T &value);
-
 template <
 	Character char_type_t = bg_helper::char_type, std::integral T,
 	typename = std::enable_if_t<!Boolean<T>, std::basic_string<char_type_t>>>
