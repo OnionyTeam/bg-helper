@@ -6,8 +6,4 @@
 using namespace bg_helper;
 
 class A {};
-int main() {
-	A a;
-	/* std::vector<A> m{a}; */
-	println<wchar_t>(a);
-}
+int main() {}

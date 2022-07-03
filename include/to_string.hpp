@@ -211,4 +211,5 @@ constexpr std::basic_string<char_type_t> concat(const Args &...v) {
 }
 
 } // namespace bg_helper
+
 #endif //_BGHELPER_TO_STRING_H__
