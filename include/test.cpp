@@ -1,13 +1,13 @@
-#include "../timer/timer.hpp"
 #include "output.hpp"
 #include "to_string.hpp"
+#include <iostream>
 #include <map>
 
-class A {};
+using namespace bg_helper;
 
+class A {};
 int main() {
-	using namespace bg_helper;
-	Format f(2);
 	A a;
-	print(to_string(a));
+	/* std::vector<A> m{a}; */
+	println<wchar_t>(a);
 }

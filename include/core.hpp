@@ -41,6 +41,13 @@ concept Map = std::ranges::range<T> && requires(T a) {
 };
 
 template <Character char_type_t = bg_helper::char_type>
+constexpr const std::basic_string<char_type_t> colon() {
+	if constexpr (std::is_same_v<char_type_t, wchar_t>)
+		return L": ";
+	else
+		return ": ";
+}
+template <Character char_type_t = bg_helper::char_type>
 constexpr const std::basic_string<char_type_t> comma() {
 	if constexpr (std::is_same_v<char_type_t, wchar_t>)
 		return L", ";
