@@ -24,9 +24,9 @@ constexpr std::basic_string<char_type_t> _to_string(const T &value) noexcept {
 	return std::basic_string<char_type_t>(value);
 }
 
-template <
-	Character char_type_t = bg_helper::char_type, std::integral T,
-	typename = std::enable_if_t<!Boolean<T>, std::basic_string<char_type_t>>>
+template <Character char_type_t = bg_helper::char_type, std::integral T,
+		  typename = std::enable_if_t<!Boolean<T> && !Character<T>,
+									  std::basic_string<char_type_t>>>
 constexpr std::basic_string<char_type_t> _to_string(const T &value) noexcept {
 	if constexpr (std::is_same_v<wchar_t, char_type_t>) {
 		return std::to_wstring(value);
@@ -34,6 +34,13 @@ constexpr std::basic_string<char_type_t> _to_string(const T &value) noexcept {
 		return std::to_string(value);
 	}
 }
+template <Character char_type_t = bg_helper::char_type>
+constexpr std::basic_string<char_type_t>
+_to_string(const char_type_t &value) noexcept {
+	char_type_t c[2]{value, 0};
+	return std::basic_string<char_type_t>(c);
+}
+
 template <Character char_type_t = bg_helper::char_type>
 constexpr std::basic_string<char_type_t>
 _to_string(const float &value) noexcept {

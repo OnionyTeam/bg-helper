@@ -56,8 +56,7 @@ constexpr void print(const Args &...v) {
 		write(STDOUT_FILENO, buffer.c_str(), buffer.size());
 	} else {
 		const auto buffer = concat<char_type_t>(v...);
-		write(STDOUT_FILENO, buffer.c_str(),
-			  buffer.size() * sizeof(char_type_t));
+		wprintf(L"%ls", buffer.c_str());
 	}
 #elif defined(_WIN32)
 	if constexpr (std::is_same_v<char_type_t, char>) {
@@ -67,8 +66,6 @@ constexpr void print(const Args &...v) {
 					  nullptr);
 	} else {
 		const auto buffer = concat<char_type_t>(v...);
-		write(STDOUT_FILENO, buffer.c_str(),
-			  buffer.size() * sizeof(char_type_t));
 		WriteConsoleW(GetStdHandle(handle), buffer.c_str(),
 					  static_cast<unsigned long>(buffer.size()), nullptr,
 					  nullptr);
@@ -84,8 +81,7 @@ constexpr void println(const Args &...v) {
 		write(STDOUT_FILENO, buffer.c_str(), buffer.size());
 	} else {
 		const auto buffer = concat<char_type_t>(v..., L"\n");
-		write(STDOUT_FILENO, buffer.c_str(),
-			  buffer.size() * sizeof(char_type_t));
+		wprintf(L"%ls\n", buffer.c_str());
 	}
 #elif defined(_WIN32)
 	if constexpr (std::is_same_v<char_type_t, char>) {
@@ -95,8 +91,6 @@ constexpr void println(const Args &...v) {
 					  nullptr);
 	} else {
 		const auto buffer = concat<char_type_t>(v..., L"\n");
-		write(STDOUT_FILENO, buffer.c_str(),
-			  buffer.size() * sizeof(char_type_t));
 		WriteConsoleW(GetStdHandle(handle), buffer.c_str(),
 					  static_cast<unsigned long>(buffer.size()), nullptr,
 					  nullptr);
