@@ -1,8 +1,12 @@
 #include "output.hpp"
 #include "to_string.hpp"
-#include <map>
+#include <iostream>
+#include <vector>
+
+int a[10][10][10];
 
 int main() {
-	using namespace bg_helper;
-	println(to_string('c'));
+    using namespace bg_helper;
+    auto s = to_string(a);
+    std::cout << s << std::endl;
 }

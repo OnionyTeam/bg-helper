@@ -30,7 +30,7 @@ concept String = std::convertible_to<T, std::string_view> ||
 	std::convertible_to<T, std::wstring_view>;
 
 template <typename T>
-concept has_to_string = requires(T a) {
+concept has_to_string = requires(T& a) {
 	a.to_string();
 };
 
